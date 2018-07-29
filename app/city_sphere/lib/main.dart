@@ -6,26 +6,127 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
-        // counter didn't reset back to zero; the application is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: null,
+          body: ListView(
+            padding: const EdgeInsets.all(16.0),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top:12.0, bottom: 12.0),
+                child: Container(
+                  child: Image(
+                      image: AssetImage("assets/images/citysphere.png"),
+                      width: 150.0,
+                      height: 50.0,
+                  ),
+                ),
+              ),
+              AptList()
+            ],
+          ),
+        )
+    );
+  }
+}
+
+class AptCard extends StatelessWidget{
+  AptCard({this.image, this.address, this.area, this.rooms});
+
+  ImageProvider<dynamic> image;
+  String address;
+  double area;
+  int rooms;
+
+  @override
+  Widget build(BuildContext context) {
+    const double iconSize = 48.0;
+
+    // TODO: implement build
+    return InkWell(
+          onTap: () =>
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AptDetails()),
+            ),
+        child: Row(
+          children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top:10.0, bottom: 10.0),
+                child: Container(
+                  child:
+                    Ink.image(
+                      image: this.image,
+                      width: 220.0,
+                      height: 120.0,
+                      fit: BoxFit.cover,
+                      child: new InkWell(),
+                    )
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left:20.0),
+                child: AptText(address: this.address, area: this.area, rooms: this.rooms)
+              )
+          ],
+        )
+      );
+  }
+}
+
+class AptList extends StatelessWidget{
+
+  AptList();
+  @override
+  Widget build(BuildContext context) {
+    const double iconSize = 48.0;
+
+    // TODO: implement build
+    return MyCard(title: "Apartments",
+        child: Column(
+        children: <Widget>[
+          AptCard(image: AssetImage("assets/images/apt1.jpg"),
+              address: "15 Campus Drive", area: 80.0, rooms: 3),
+          AptCard(image: AssetImage("assets/images/apt2.jpg"),
+              address: "276 Marble Road", area: 67.4, rooms: 2),
+          AptCard(image: AssetImage("assets/images/apt3.jpg"),
+              address: "7 Everett Avenue", area: 133.5, rooms: 4),
+          AptCard(image: AssetImage("assets/images/apt4.jpg"),
+              address: "155 Princeton Way", area: 70.2, rooms: 2),
+        ],
+      )
+    );
+  }
+}
+
+class AptText extends StatelessWidget{
+  AptText({this.address, this.area, this.rooms});
+
+  String address;
+  double area;
+  int rooms;
+
+  @override
+  Widget build(BuildContext context) {
+    const double iconSize = 48.0;
+
+    // TODO: implement build
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(this.address, style: TextStyle(fontStyle: FontStyle.italic)),
+        Text(this.area.toString() + " sq. m"),
+        Text(this.rooms.toString() + " rooms")
+    ]
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
+
+
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -104,6 +205,61 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: new Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class MyCard extends StatelessWidget{
+  MyCard({this.title, this.child});
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical:  8.0),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))
+      ),
+      elevation: 3.0,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              this.title,
+              style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54
+              ),
+            ),
+          ),
+          this.child,
+        ],
+      ),
+    );
+  }
+}
+
+class AptDetails extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Apartment"),
+      ),
+      body: Center(
+        child: ListView(
+          padding: EdgeInsets.all(8.0),
+          children: <Widget>[
+            Text("...")
+          ],
+        ),
+      ),
     );
   }
 }
